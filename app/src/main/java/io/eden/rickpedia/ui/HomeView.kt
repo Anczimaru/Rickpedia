@@ -13,13 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import io.eden.rickpedia.model.MainViewModel
 import io.eden.rickpedia.navigation.Screen
 
 @Composable
-fun HomeScreenView(navController: NavController) {
-    DrawerView(navController = navController, ) {
+fun HomeScreenView(
+    navController: NavController,
+    viewModel: MainViewModel,
+) {
+    DrawerView(navController = navController) {
         // TODO make some grid here to be able to select what you are looking for
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,5 +73,5 @@ fun HomeScreenView(navController: NavController) {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreenView(rememberNavController())
+    HomeScreenView(rememberNavController(), viewModel())
 }

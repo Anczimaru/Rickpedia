@@ -4,8 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import io.eden.rickpedia.data.dao.CharacterDao
+import io.eden.rickpedia.data.dao.EpisodeDao
+import io.eden.rickpedia.data.dao.LocationDao
+import io.eden.rickpedia.data.entities.CharacterEntity
+import io.eden.rickpedia.data.entities.EpisodesEntity
+import io.eden.rickpedia.data.entities.LocationEntity
 
 @TypeConverters(value = [DatabaseConverters::class])
 @Database(
@@ -13,7 +18,7 @@ import androidx.room.TypeConverters
     version = 1,
     exportSchema = false
 )
-abstract class RickpediaDatabase: RoomDatabase() {
+abstract class RickpediaDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao
     abstract fun episodeDao(): EpisodeDao
     abstract fun locationDao(): LocationDao

@@ -1,11 +1,10 @@
-package io.eden.rickpedia.data
+package io.eden.rickpedia.data.entities
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 @Entity(tableName = "character-table")
@@ -25,21 +24,21 @@ data class CharacterEntity(
     val episode: List<String>,
     val url: String,
     val created: String
-): Parcelable
+) : Parcelable, DatabaseEntity()
 
 @Serializable
 @Parcelize
 data class OriginEntity(
     val name: String,
     val url: String,
-): Parcelable
+) : Parcelable
 
 @Serializable
 @Parcelize
 data class CharacterLocationEntity(
     val name: String,
     val url: String,
-):Parcelable
+) : Parcelable
 
 val DummyCharacter: CharacterEntity
     get() = Json.decodeFromString<CharacterEntity>(dummyCharacter)

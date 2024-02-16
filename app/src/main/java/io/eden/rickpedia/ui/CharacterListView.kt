@@ -1,6 +1,7 @@
 package io.eden.rickpedia.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,21 +30,21 @@ fun CharacterListView(
     navController: NavController,
     viewModel: MainViewModel,
 ) {
-//    val characterList = listOf<CharacterEntity>(DummyCharacter, DummyCharacter, DummyCharacter, DummyCharacter, DummyCharacter)
     DrawerView(navController = navController, title = Screen.CharacterListScreen.title) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().padding(it)) {
             when {
-                viewModel.characterState.value.loading -> {
+                viewModel.multiCharacterState.value.loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 else -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it)
                     ) {
-                        items(viewModel.characterState.value.list) { character ->
-                            Row(modifier = Modifier.fillMaxWidth()) {
+                        items(viewModel.multiCharacterState.value.list) { character ->
+                            Row(modifier = Modifier.fillMaxWidth().clickable {
+                                navController.navigate(Screen.CharacterDetails.route + "/${character.id}")
+                            }) {
                                 Image(
                                     painter = rememberAsyncImagePainter(model = character.image),
                                     contentDescription = "image",

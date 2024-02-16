@@ -1,12 +1,13 @@
 package io.eden.rickpedia.data
 
 import android.util.Log
+import io.eden.rickpedia.data.dao.BaseDao
+import io.eden.rickpedia.data.entities.CharacterEntity
+import io.eden.rickpedia.data.entities.DatabaseEntity
+import io.eden.rickpedia.data.entities.EpisodesEntity
+import io.eden.rickpedia.data.entities.LocationEntity
 import io.eden.rickpedia.network.ApiService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 
@@ -16,54 +17,80 @@ class RickpediaRepository(
 ) {
     private val TAG = "Rickpedia.Repository"
 
-    suspend fun getAllCharacters(): List<CharacterEntity>{
+    fun getCharacter(id: Int): CharacterEntity {
+        return database.characterDao().getCharacterById(id)
+    }
+
+    suspend fun getAllCharacters(): List<CharacterEntity> {
         Log.i(TAG, "Fetching characters")
         val localData = database.characterDao().getAllCharacters()
         return if (localData.isEmpty()) {
             Log.i(TAG, "DATABASE IS EMPTY")
             val results = apiService.getAllCharacters().results
-            writeCharactersToDatabaseAsync(results)
+            makeAsyncWrite(results)
             results
         } else {
             Log.i(TAG, "DATABASE IS NOT EMPTY")
             localData
         }
-
     }
 
-    private suspend fun writeCharactersToDatabaseAsync(listOfCharacters: List<CharacterEntity>){
-        withContext(Dispatchers.IO){
-            listOfCharacters.forEach {
-                database.characterDao().addCharacter(it)
+     suspend fun getAllLocations(): List<LocationEntity> {
+        Log.i(TAG, "Fetching characters")
+        val localData = database.locationDao().getAllLocations()
+        return if (localData.isEmpty()) {
+            Log.i(TAG, "DATABASE IS EMPTY")
+            val results = apiService.getAllLocations().results
+            makeAsyncWrite(results)
+            results
+        } else {
+            Log.i(TAG, "DATABASE IS NOT EMPTY")
+            localData
+        }
+    }
+
+     suspend fun getAllEpisodes(): List<EpisodesEntity> {
+        Log.i(TAG, "Fetching characters")
+        val localData = database.episodeDao().getAllEpisodes()
+        return if (localData.isEmpty()) {
+            Log.i(TAG, "DATABASE IS EMPTY")
+            val results = apiService.getAllEpisodes().results
+            makeAsyncWrite(results)
+            results
+        } else {
+            Log.i(TAG, "DATABASE IS NOT EMPTY")
+            localData
+        }
+    }
+
+
+
+
+    private fun <T: DatabaseEntity> getDao(element: T): BaseDao<T> {
+         return when (element) {
+            is CharacterEntity -> {
+                database.characterDao() as BaseDao<T>
+            }
+
+            is LocationEntity -> {
+                database.locationDao() as BaseDao<T>
+            }
+
+            is EpisodesEntity -> {
+                database.episodeDao() as BaseDao<T>
+            }
+
+            else -> {
+                throw Exception("Something went wrong with casting")
             }
         }
     }
 
-    fun isCharactersTableEmpty(): Boolean {
-        return database.characterDao().getAllCharacters().isEmpty()
-    }
-
-//    suspend fun fetchAllCharacters() = coroutineScope {
-//        try {
-//            apiService.getAllCharacters().results.forEach{
-//                addCharacterToDb(it)
-//            }
-//        } catch (exception: Exception) {
-//            Log.i(TAG, "Something went wrong with API call")
-//        }
-//    }
-
-    fun getAllEpisodes(): Flow<List<EpisodesEntity>> {
-        return database.episodeDao().getAllEpisodes()
-    }
-
-
-    fun getAllLocations(): Flow<List<LocationEntity>> {
-        return database.locationDao().getAllLocations()
-    }
-
-    suspend fun addCharacterToDb(characterEntity: CharacterEntity) {
-        Log.i(TAG, "Adding new character with id: ${characterEntity.id}")
-        database.characterDao().addCharacter(characterEntity)
+    private suspend fun makeAsyncWrite(elements: List<DatabaseEntity>) {
+        withContext(Dispatchers.IO) {
+            elements.forEach { element ->
+                getDao(element).insert(element)
+            }
+        }
     }
 }

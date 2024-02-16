@@ -1,4 +1,4 @@
-package io.eden.rickpedia.data
+package io.eden.rickpedia.data.entities
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -19,7 +19,7 @@ data class LocationEntity(
     val residents: List<String>,
     val url: String,
     val created: String,
-) : Parcelable
+) : Parcelable, DatabaseEntity()
 
 val DummyLocation: LocationEntity
     get() = Json.decodeFromString<LocationEntity>(dummyLocationString)

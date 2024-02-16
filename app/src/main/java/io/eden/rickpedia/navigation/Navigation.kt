@@ -21,16 +21,16 @@ fun Navigation(
 ) {
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         composable(Screen.HomeScreen.route) {
-            HomeScreenView(navController = navController)
+            HomeScreenView(navController = navController, viewModel = viewModel)
         }
         composable(Screen.CharacterListScreen.route){
-            CharacterListView(navController = navController, viewModel)
+            CharacterListView(navController = navController, viewModel = viewModel)
         }
         composable(Screen.EpisodesListScreen.route){
-            EpisodesListView(navController = navController)
+            EpisodesListView(navController = navController, viewModel = viewModel)
         }
         composable(Screen.LocationListScreen.route){
-            LocationListView(navController = navController)
+            LocationListView(navController = navController, viewModel = viewModel)
         }
         composable(Screen.CharacterDetails.route + "/{id}", arguments = listOf(
             navArgument("id") {
@@ -39,7 +39,7 @@ fun Navigation(
                 nullable = false
             })){entry ->
             val id = if (entry.arguments != null) entry.arguments!!.getInt("id") else 0
-            CharacterDetailsView(navController, characterId = id)
+            CharacterDetailsView(navController = navController, viewModel = viewModel,  characterId = id)
         }
     }
 }

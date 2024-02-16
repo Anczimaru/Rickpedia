@@ -1,16 +1,16 @@
-package io.eden.rickpedia.data
+package io.eden.rickpedia.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
+import io.eden.rickpedia.data.entities.CharacterEntity
 
 @Dao
-abstract class CharacterDao: DaoInterface {
+abstract class CharacterDao: BaseDao<CharacterEntity> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun addCharacter(characterEntity: CharacterEntity)
+    abstract override suspend fun insert(entity: CharacterEntity)
 
     @Query("select * from `character-table`")
     abstract fun getAllCharacters(): List<CharacterEntity>

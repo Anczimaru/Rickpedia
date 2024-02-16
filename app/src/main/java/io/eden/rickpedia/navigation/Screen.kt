@@ -9,6 +9,7 @@ sealed class Screen(val title:String, val route: String) {
     object LocationListScreen : Screen("Location list","location_list")
     object EpisodesListScreen : Screen("Episodes List","episodes_list")
     object CharacterDetails : Screen("Character Details", "character_details")
+    object EpisodeDetails: Screen("Episode Details", "episodes_details")
 
 
     sealed class DrawerScreen(val dTittle: String, val dRoute: String, @DrawableRes val icon:Int) : Screen(dTittle, dRoute){

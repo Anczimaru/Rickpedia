@@ -1,6 +1,7 @@
-package io.eden.rickpedia.data
+package io.eden.rickpedia.data.entities
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -15,13 +16,12 @@ data class EpisodesEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    @SerialName("air_date")
-    val airDate: String,
+    val air_date: String?,
     val episode: String,
     val characters: List<String>,
     val url: String,
     val created: String,
-) : Parcelable
+) : Parcelable, DatabaseEntity()
 
 val DummyEpisode: EpisodesEntity
     get() = Json.decodeFromString<EpisodesEntity>(dummyEpisodeString)

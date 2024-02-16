@@ -1,7 +1,6 @@
 package io.eden.rickpedia.network
 
-import io.eden.rickpedia.data.CharacterEntity
-import retrofit2.Response
+import io.eden.rickpedia.data.entities.CharacterEntity
 
 
 data class InfoClass(
@@ -11,7 +10,7 @@ data class InfoClass(
     val prev: String?,
 )
 
-data class CharacterListResponse(
+data class Response<T>(
     val info: InfoClass,
-    val results: List<CharacterEntity>
+    val results: T
 )
