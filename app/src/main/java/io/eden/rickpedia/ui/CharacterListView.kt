@@ -33,7 +33,7 @@ fun CharacterListView(
     DrawerView(navController = navController, title = Screen.CharacterListScreen.title) {
         Box(modifier = Modifier.fillMaxSize().padding(it)) {
             when {
-                viewModel.multiCharacterState.value.loading -> {
+                viewModel.multiCharacterState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
                 else -> {

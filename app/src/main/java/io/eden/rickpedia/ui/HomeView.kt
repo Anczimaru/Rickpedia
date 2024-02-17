@@ -24,7 +24,7 @@ fun HomeScreenView(
     navController: NavController,
     viewModel: MainViewModel,
 ) {
-    DrawerView(navController = navController) {
+    DrawerView(navController = navController, title = "Home") {
         // TODO make some grid here to be able to select what you are looking for
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

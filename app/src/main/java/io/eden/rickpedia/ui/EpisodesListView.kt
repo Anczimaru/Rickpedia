@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import io.eden.rickpedia.data.entities.DummyEpisode
 import io.eden.rickpedia.data.entities.EpisodesEntity
 import io.eden.rickpedia.model.MainViewModel
 import io.eden.rickpedia.navigation.Screen
@@ -27,11 +26,13 @@ fun EpisodesListView(
     viewModel: MainViewModel,
 ) {
     DrawerView(navController = navController, title = Screen.EpisodesListScreen.title) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
-                viewModel.multiEpisodesState.value.loading -> {
+                viewModel.multiEpisodesState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
@@ -42,17 +43,31 @@ fun EpisodesListView(
                             .padding(8.dp)
                     ) {
                         items(viewModel.multiEpisodesState.value.list) { episode ->
-                            Row(modifier = Modifier.fillMaxWidth().clickable {
-                                navController.navigate(Screen.EpisodeDetails.route + "/${episode.id}")
-                            }) {
-                                Text(text = episode.episode)
-                                Spacer(modifier = Modifier.padding(8.dp))
-                                Text(text = episode.name)
-                            }
+                            EpisodeEntry(
+                                episode,
+                                onEpisodeClicked = {
+                                    navController.navigate(Screen.EpisodeDetails.route + "/${it}")
+                                }
+                            )
                         }
                     }
                 }
             }
         }
     }
+}
+
+
+@Composable
+fun EpisodeEntry(episode: EpisodesEntity, onEpisodeClicked: (Int) -> Unit) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+            onEpisodeClicked(episode.id)
+        }) {
+        Text(text = episode.episode)
+        Spacer(modifier = Modifier.padding(8.dp))
+        Text(text = episode.name)
+    }
+    Spacer(modifier = Modifier.padding(8.dp))
 }

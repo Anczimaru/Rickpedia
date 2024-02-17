@@ -52,7 +52,7 @@ fun EpisodesDetailsView(
                         //Add Image
                         LazyColumn() {
                             items(element.getKeyValuePairs()) {
-                                EpisodesEntry(key = it.first, value = it.second)
+                                EpisodesDetails(key = it.first, value = it.second)
                             }
 
                         }
@@ -88,15 +88,19 @@ fun StarringComposable(
     Spacer(modifier = Modifier.padding(8.dp))
     LazyColumn() {
         items(listOfCharacters) {
-            Text(text = it.second, modifier = Modifier.clickable {
+            Text(
+                text = it.second,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.clickable {
                 onCharacterClicked(it.first)
             })
+            Spacer(modifier = Modifier.padding(8.dp))
         }
     }
 }
 
 @Composable
-fun EpisodesEntry(key: String, value: String) {
+fun EpisodesDetails(key: String, value: String) {
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
         Text(
             text = key,

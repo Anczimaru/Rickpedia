@@ -13,6 +13,7 @@ sealed class Screen(val title:String, val route: String) {
 
 
     sealed class DrawerScreen(val dTittle: String, val dRoute: String, @DrawableRes val icon:Int) : Screen(dTittle, dRoute){
+        object Home: DrawerScreen("Home", "home_screen", R.drawable.placeholder)
         object Characters: DrawerScreen( "Character List", "character_list", R.drawable.placeholder)
         object Locations: DrawerScreen("Locations List", "location_list", R.drawable.placeholder)
         object Episodes: DrawerScreen("Episodes List", "episodes_list", R.drawable.placeholder)
@@ -20,6 +21,7 @@ sealed class Screen(val title:String, val route: String) {
 }
 
 val drawerScreens = listOf<Screen.DrawerScreen>(
+    Screen.DrawerScreen.Home,
     Screen.DrawerScreen.Characters,
     Screen.DrawerScreen.Locations,
     Screen.DrawerScreen.Episodes,

@@ -102,4 +102,31 @@ class RickpediaRepository(
             }
         }
     }
+
+    suspend fun downloadRemainingCharacters(){
+        withContext(Dispatchers.IO) {
+            for (i in (2..42)){
+                val results = apiService.getCharacterPage(i.toString()).results
+                makeAsyncWrite(results)
+            }
+        }
+    }
+
+    suspend fun downloadRemainingEpisodes(){
+        withContext(Dispatchers.IO) {
+            for (i in (2..3)){
+                val results = apiService.getEpisodePage(i.toString()).results
+                makeAsyncWrite(results)
+            }
+        }
+    }
+
+    suspend fun downloadRemainingLocations(){
+        withContext(Dispatchers.IO) {
+            for (i in (2..7)){
+                val results = apiService.getLocationPage(i.toString()).results
+                makeAsyncWrite(results)
+            }
+        }
+    }
 }

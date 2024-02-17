@@ -53,71 +53,85 @@ class MainViewModel(
     fun loadAllCharactersData() {
         Log.i(TAG, "Loading characters data")
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getAllCharacters()
+            var response = repository.getAllCharacters()
             _multiCharactersState.value = _multiCharactersState.value.copy(
                 list = response,
-                loading = false,
+                loadingFirstBatch = false,
                 error = null,
             )
             Log.i(TAG, "STH")
-        }
-    }
-
-    //Locations loading
-    fun loadCertainLocationData(id: Int) {
-        Log.i(TAG, "Loading some data")
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getLocationById(id)
-            _locationState.value = _locationState.value.copy(
-                element = response,
-                loading = false,
-                error = null,
-            )
-            Log.i(TAG, "STH")
+            //TODO add some form of pagination here
+            if (response.count() < 21) {
+                repository.downloadRemainingCharacters()
+                response = repository.getAllCharacters()
+                _multiCharactersState.value = _multiCharactersState.value.copy(
+                    loadingAll = false,
+                    list = response
+                )
+            }
         }
     }
 
     fun loadAllLocationData() {
         Log.i(TAG, "Loading characters data")
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getAllLocations()
+            var response = repository.getAllLocations()
             _multiLocationsState.value = _multiLocationsState.value.copy(
                 list = response,
-                loading = false,
+                loadingFirstBatch = false,
                 error = null,
             )
             Log.i(TAG, "STH")
+            if (response.count() < 21) {
+                repository.downloadRemainingLocations()
+                response = repository.getAllLocations()
+                _multiLocationsState.value = _multiLocationsState.value.copy(
+                    loadingAll = false,
+                    list = response
+                )
+            }
         }
     }
 
     fun loadAllEpisodesData() {
         Log.i(TAG, "Loading characters data")
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getAllEpisodes()
+            var response = repository.getAllEpisodes()
             _multiEpisodesState.value = _multiEpisodesState.value.copy(
                 list = response,
-                loading = false,
+                loadingFirstBatch = false,
                 error = null,
             )
             Log.i(TAG, "STH")
+            if (response.count() < 21) {
+                repository.downloadRemainingEpisodes()
+                response = repository.getAllEpisodes()
+                _multiEpisodesState.value = _multiEpisodesState.value.copy(
+                    loadingAll = false,
+                    list = response
+                )
+            }
         }
     }
 
     data class MultiCharacterState(
         val list: List<CharacterEntity> = emptyList(),
-        val loading: Boolean = true,
+        val loadingFirstBatch: Boolean = true,
+        val loadingAll: Boolean = true,
         val error: String? = null,
     )
 
     data class MultiLocationsState(
         val list: List<LocationEntity> = emptyList(),
-        val loading: Boolean = true,
+        val loadingFirstBatch: Boolean = true,
+        val loadingAll: Boolean = true,
         val error: String? = null,
     )
 
     data class MultiEpisodesState(
         val list: List<EpisodesEntity> = emptyList(),
-        val loading: Boolean = true,
+        val loadingFirstBatch: Boolean = true,
+        val loadingAll: Boolean = true,
         val error: String? = null,
     )
 

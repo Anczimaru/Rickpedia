@@ -26,7 +26,7 @@ fun LocationListView(
     DrawerView(navController = navController, title = Screen.LocationListScreen.title) {
         Box(modifier = Modifier.fillMaxSize().padding(it)) {
             when {
-                viewModel.multiLocationsState.value.loading -> {
+                viewModel.multiLocationsState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
 
