@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 @Serializable
 @Parcelize
 data class LocationEntity(
+    //Fields received from API
     @PrimaryKey
     val id: Int,
     val name: String,
@@ -19,7 +20,16 @@ data class LocationEntity(
     val residents: List<String>,
     val url: String,
     val created: String,
-) : Parcelable, DatabaseEntity()
+    //Fields that are generated
+    val residentsIds: List<Int>
+) : Parcelable, DatabaseEntity() {
+
+    override fun generateUpdate(): DatabaseEntity {
+        return this.copy(
+            residentsIds = residents.trimToGetIds().filter{ it != 0},
+        )
+    }
+}
 
 val DummyLocation: LocationEntity
     get() = Json.decodeFromString<LocationEntity>(dummyLocationString)

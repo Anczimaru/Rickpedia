@@ -17,8 +17,12 @@ class RickpediaRepository(
 ) {
     private val TAG = "Rickpedia.Repository"
 
-    fun getCharacter(id: Int): CharacterEntity {
+    fun getCharacterById(id: Int): CharacterEntity {
         return database.characterDao().getCharacterById(id)
+    }
+
+    fun getCharacterNameById(id: Int): String {
+        return database.characterDao().getCharacterById(id)?.name ?: ""
     }
 
     suspend fun getAllCharacters(): List<CharacterEntity> {
@@ -35,6 +39,10 @@ class RickpediaRepository(
         }
     }
 
+    fun getLocationById(id: Int): LocationEntity{
+        return database.locationDao().getLocationById(id)
+    }
+
      suspend fun getAllLocations(): List<LocationEntity> {
         Log.i(TAG, "Fetching characters")
         val localData = database.locationDao().getAllLocations()
@@ -47,6 +55,10 @@ class RickpediaRepository(
             Log.i(TAG, "DATABASE IS NOT EMPTY")
             localData
         }
+    }
+
+    fun getEpisodeById(id: Int): EpisodesEntity{
+        return database.episodeDao().getEpisodeById(id)
     }
 
      suspend fun getAllEpisodes(): List<EpisodesEntity> {
@@ -62,9 +74,6 @@ class RickpediaRepository(
             localData
         }
     }
-
-
-
 
     private fun <T: DatabaseEntity> getDao(element: T): BaseDao<T> {
          return when (element) {
@@ -89,7 +98,7 @@ class RickpediaRepository(
     private suspend fun makeAsyncWrite(elements: List<DatabaseEntity>) {
         withContext(Dispatchers.IO) {
             elements.forEach { element ->
-                getDao(element).insert(element)
+                getDao(element).insert(element.generateUpdate())
             }
         }
     }

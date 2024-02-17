@@ -1,11 +1,9 @@
 package io.eden.rickpedia.data.entities
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -13,6 +11,7 @@ import kotlinx.serialization.json.Json
 @Serializable
 @Parcelize
 data class EpisodesEntity(
+    //Fields received from API
     @PrimaryKey
     val id: Int,
     val name: String,
@@ -21,7 +20,25 @@ data class EpisodesEntity(
     val characters: List<String>,
     val url: String,
     val created: String,
-) : Parcelable, DatabaseEntity()
+    //Fields that are generated
+    val charactersIds: List<Int>?
+) : Parcelable, DatabaseEntity() {
+
+    fun getKeyValuePairs(): List<Pair<String, String>> {
+        return listOf(
+            Pair("name", name),
+            Pair("air_date", air_date ?: "Unknown"),
+            Pair("episode", episode),
+            // TODO Consider adding characters
+        )
+    }
+
+    override fun generateUpdate(): DatabaseEntity {
+        return this.copy(
+            charactersIds = characters.trimToGetIds().filter { it != 0 },
+        )
+    }
+}
 
 val DummyEpisode: EpisodesEntity
     get() = Json.decodeFromString<EpisodesEntity>(dummyEpisodeString)

@@ -1,5 +1,6 @@
 package io.eden.rickpedia.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +27,9 @@ fun EpisodesListView(
     viewModel: MainViewModel,
 ) {
     DrawerView(navController = navController, title = Screen.EpisodesListScreen.title) {
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
             when {
                 viewModel.multiEpisodesState.value.loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -39,7 +42,10 @@ fun EpisodesListView(
                             .padding(8.dp)
                     ) {
                         items(viewModel.multiEpisodesState.value.list) { episode ->
-                            Row(modifier = Modifier.fillMaxWidth()) {
+                            Row(modifier = Modifier.fillMaxWidth().clickable {
+                                navController.navigate(Screen.EpisodeDetails.route + "/${episode.id}")
+                            }) {
+                                Text(text = episode.episode)
                                 Spacer(modifier = Modifier.padding(8.dp))
                                 Text(text = episode.name)
                             }

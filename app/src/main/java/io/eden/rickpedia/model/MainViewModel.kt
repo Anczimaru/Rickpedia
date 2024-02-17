@@ -13,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+//TODO REFACTOR into smaller classes!
+
 class MainViewModel(
     private val repository: RickpediaRepository
 ) : ViewModel() {
@@ -22,10 +24,12 @@ class MainViewModel(
     private val _multiEpisodesState = mutableStateOf(MultiEpisodesState())
     private val _multiCharactersState = mutableStateOf(MultiCharacterState())
     private val _charactersState = mutableStateOf(SingleCharacterState())
+    private val _locationState = mutableStateOf(SingleLocationState())
     val multiCharacterState: State<MultiCharacterState> = _multiCharactersState
     val multiLocationsState: State<MultiLocationsState> = _multiLocationsState
     val multiEpisodesState: State<MultiEpisodesState> = _multiEpisodesState
     val characterState: State<SingleCharacterState> = _charactersState
+    val locationState: State<SingleLocationState> = _locationState
 
     init {
         loadAllCharactersData()
@@ -36,7 +40,7 @@ class MainViewModel(
     fun loadCertainCharacterData(id: Int) {
         Log.i(TAG, "Loading some data")
         viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getCharacter(id)
+            val response = repository.getCharacterById(id)
             _charactersState.value = _charactersState.value.copy(
                 element = response,
                 loading = false,
@@ -52,6 +56,20 @@ class MainViewModel(
             val response = repository.getAllCharacters()
             _multiCharactersState.value = _multiCharactersState.value.copy(
                 list = response,
+                loading = false,
+                error = null,
+            )
+            Log.i(TAG, "STH")
+        }
+    }
+
+    //Locations loading
+    fun loadCertainLocationData(id: Int) {
+        Log.i(TAG, "Loading some data")
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getLocationById(id)
+            _locationState.value = _locationState.value.copy(
+                element = response,
                 loading = false,
                 error = null,
             )
@@ -86,26 +104,32 @@ class MainViewModel(
     }
 
     data class MultiCharacterState(
-        val loading: Boolean = true,
         val list: List<CharacterEntity> = emptyList(),
+        val loading: Boolean = true,
         val error: String? = null,
     )
 
     data class MultiLocationsState(
-        val loading: Boolean = true,
         val list: List<LocationEntity> = emptyList(),
+        val loading: Boolean = true,
         val error: String? = null,
     )
 
     data class MultiEpisodesState(
-        val loading: Boolean = true,
         val list: List<EpisodesEntity> = emptyList(),
+        val loading: Boolean = true,
         val error: String? = null,
     )
 
     data class SingleCharacterState(
-        val loading: Boolean = true,
         val element: CharacterEntity? = null,
+        val loading: Boolean = true,
+        val error: String? = null,
+    )
+
+    data class SingleLocationState(
+        val element: LocationEntity? = null,
+        val loading: Boolean = true,
         val error: String? = null,
     )
 }

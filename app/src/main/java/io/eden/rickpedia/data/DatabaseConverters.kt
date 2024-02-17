@@ -26,7 +26,7 @@ class DatabaseConverters {
     fun convertJSONStringToOriginEntity(jsonString: String): OriginEntity =
         Gson().fromJson(jsonString, OriginEntity::class.java)
 
-    //List string convert
+    //List of strings converter
     @TypeConverter
     fun convertStringListToJSONString(listOfString: List<String>): String =
         Gson().toJson(listOfString)
@@ -34,4 +34,14 @@ class DatabaseConverters {
     @TypeConverter
     fun convertJSONStringToStringList(jsonString: String): List<String> =
         Json.decodeFromString<List<String>>(jsonString)
+
+    //List of Ints converters
+
+    @TypeConverter
+    fun convertIntListToJSONString(listOfInts: List<Int>): String =
+        Gson().toJson(listOfInts)
+
+    @TypeConverter
+    fun convertJSONStringToIntList(jsonString: String): List<Int> =
+        Json.decodeFromString<List<Int>>(jsonString)
 }

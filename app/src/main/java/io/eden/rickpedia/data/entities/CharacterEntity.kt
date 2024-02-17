@@ -7,10 +7,12 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
+
 @Entity(tableName = "character-table")
 @Serializable
 @Parcelize
 data class CharacterEntity(
+    //Fields received from API
     @PrimaryKey
     val id: Int,
     val name: String,
@@ -23,8 +25,19 @@ data class CharacterEntity(
     val image: String,
     val episode: List<String>,
     val url: String,
-    val created: String
-) : Parcelable, DatabaseEntity()
+    val created: String,
+    //Fields that are generated later on to help navigate through app
+    val locationId: Int?,
+    val episodeIds: List<Int?>,
+) : Parcelable, DatabaseEntity() {
+
+    override fun generateUpdate(): CharacterEntity{
+        return this.copy(
+            locationId = location.url.trimToGetId(),
+            episodeIds = episode.trimToGetIds().filter { it != 0 },
+        )
+    }
+}
 
 @Serializable
 @Parcelize
