@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import io.eden.rickpedia.model.CharacterDetailsViewModel
 import io.eden.rickpedia.model.EpisodeDetailsViewModel
 import io.eden.rickpedia.model.MainViewModel
 import io.eden.rickpedia.ui.CharacterDetailsView
@@ -20,6 +21,7 @@ fun Navigation(
     navController: NavHostController,
     viewModel: MainViewModel,
     episodeDetailsViewModel: EpisodeDetailsViewModel,
+    characterDetailsViewModel: CharacterDetailsViewModel,
 ) {
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         composable(Screen.HomeScreen.route) {
@@ -41,7 +43,7 @@ fun Navigation(
                 nullable = false
             })){entry ->
             val id = if (entry.arguments != null) entry.arguments!!.getInt("id") else 0
-            CharacterDetailsView(navController = navController, viewModel = viewModel,  characterId = id)
+            CharacterDetailsView(navController = navController, viewModel = characterDetailsViewModel,  characterId = id)
         }
         composable(Screen.EpisodeDetails.route + "/{id}", arguments = listOf(
             navArgument("id") {

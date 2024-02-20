@@ -23,31 +23,16 @@ class MainViewModel(
     private val _multiLocationsState = mutableStateOf(MultiLocationsState())
     private val _multiEpisodesState = mutableStateOf(MultiEpisodesState())
     private val _multiCharactersState = mutableStateOf(MultiCharacterState())
-    private val _charactersState = mutableStateOf(SingleCharacterState())
     private val _locationState = mutableStateOf(SingleLocationState())
     val multiCharacterState: State<MultiCharacterState> = _multiCharactersState
     val multiLocationsState: State<MultiLocationsState> = _multiLocationsState
     val multiEpisodesState: State<MultiEpisodesState> = _multiEpisodesState
-    val characterState: State<SingleCharacterState> = _charactersState
     val locationState: State<SingleLocationState> = _locationState
 
     init {
         loadAllCharactersData()
         loadAllLocationData()
         loadAllEpisodesData()
-    }
-
-    fun loadCertainCharacterData(id: Int) {
-        Log.i(TAG, "Loading some data")
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = repository.getCharacterById(id)
-            _charactersState.value = _charactersState.value.copy(
-                element = response,
-                loading = false,
-                error = null,
-            )
-            Log.i(TAG, "STH")
-        }
     }
 
     fun loadAllCharactersData() {
@@ -132,12 +117,6 @@ class MainViewModel(
         val list: List<EpisodesEntity> = emptyList(),
         val loadingFirstBatch: Boolean = true,
         val loadingAll: Boolean = true,
-        val error: String? = null,
-    )
-
-    data class SingleCharacterState(
-        val element: CharacterEntity? = null,
-        val loading: Boolean = true,
         val error: String? = null,
     )
 

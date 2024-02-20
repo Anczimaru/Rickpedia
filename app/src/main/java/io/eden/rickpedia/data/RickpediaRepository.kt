@@ -39,11 +39,11 @@ class RickpediaRepository(
         }
     }
 
-    fun getLocationById(id: Int): LocationEntity{
+    fun getLocationById(id: Int): LocationEntity {
         return database.locationDao().getLocationById(id)
     }
 
-     suspend fun getAllLocations(): List<LocationEntity> {
+    suspend fun getAllLocations(): List<LocationEntity> {
         Log.i(TAG, "Fetching characters")
         val localData = database.locationDao().getAllLocations()
         return if (localData.isEmpty()) {
@@ -57,11 +57,16 @@ class RickpediaRepository(
         }
     }
 
-    fun getEpisodeById(id: Int): EpisodesEntity{
+    fun getEpisodeById(id: Int): EpisodesEntity {
         return database.episodeDao().getEpisodeById(id)
     }
 
-     suspend fun getAllEpisodes(): List<EpisodesEntity> {
+    fun getEpisodeNameById(id: Int): Pair<String, String> {
+        val episode = getEpisodeById(id)
+        return Pair<String, String>(episode.episode, episode.name)
+    }
+
+    suspend fun getAllEpisodes(): List<EpisodesEntity> {
         Log.i(TAG, "Fetching characters")
         val localData = database.episodeDao().getAllEpisodes()
         return if (localData.isEmpty()) {
@@ -75,8 +80,8 @@ class RickpediaRepository(
         }
     }
 
-    private fun <T: DatabaseEntity> getDao(element: T): BaseDao<T> {
-         return when (element) {
+    private fun <T : DatabaseEntity> getDao(element: T): BaseDao<T> {
+        return when (element) {
             is CharacterEntity -> {
                 database.characterDao() as BaseDao<T>
             }
@@ -103,27 +108,27 @@ class RickpediaRepository(
         }
     }
 
-    suspend fun downloadRemainingCharacters(){
+    suspend fun downloadRemainingCharacters() {
         withContext(Dispatchers.IO) {
-            for (i in (2..42)){
+            for (i in (2..42)) {
                 val results = apiService.getCharacterPage(i.toString()).results
                 makeAsyncWrite(results)
             }
         }
     }
 
-    suspend fun downloadRemainingEpisodes(){
+    suspend fun downloadRemainingEpisodes() {
         withContext(Dispatchers.IO) {
-            for (i in (2..3)){
+            for (i in (2..3)) {
                 val results = apiService.getEpisodePage(i.toString()).results
                 makeAsyncWrite(results)
             }
         }
     }
 
-    suspend fun downloadRemainingLocations(){
+    suspend fun downloadRemainingLocations() {
         withContext(Dispatchers.IO) {
-            for (i in (2..7)){
+            for (i in (2..7)) {
                 val results = apiService.getLocationPage(i.toString()).results
                 makeAsyncWrite(results)
             }

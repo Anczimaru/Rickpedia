@@ -2,11 +2,12 @@ package io.eden.rickpedia.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,7 +32,9 @@ fun CharacterListView(
     viewModel: MainViewModel,
 ) {
     DrawerView(navController = navController, title = Screen.CharacterListScreen.title) {
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
             when {
                 viewModel.multiCharacterState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -42,16 +45,25 @@ fun CharacterListView(
                             .fillMaxSize()
                     ) {
                         items(viewModel.multiCharacterState.value.list) { character ->
-                            Row(modifier = Modifier.fillMaxWidth().clickable {
-                                navController.navigate(Screen.CharacterDetails.route + "/${character.id}")
-                            }) {
-                                Image(
-                                    painter = rememberAsyncImagePainter(model = character.image),
-                                    contentDescription = "image",
-                                    modifier = Modifier.size(200.dp)
-                                )
-                                Spacer(modifier = Modifier.padding(8.dp))
-                                Text(text = character.name)
+                            Row(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp)
+                                .clickable {
+                                    navController.navigate(Screen.CharacterDetails.route + "/${character.id}")
+                                },
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Column(
+                                ) {
+                                    Image(
+                                        painter = rememberAsyncImagePainter(model = character.image),
+                                        contentDescription = "image",
+                                        modifier = Modifier.size(200.dp)
+                                    )
+                                    Spacer(modifier = Modifier.padding(8.dp))
+                                    Text(text = character.name, modifier = Modifier.align(Alignment.CenterHorizontally))
+                                    Spacer(modifier = Modifier.padding(8.dp))
+                                }
                             }
                         }
                     }

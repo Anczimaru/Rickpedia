@@ -4,6 +4,7 @@ package io.eden.rickpedia.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,9 +26,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -64,7 +67,8 @@ fun DrawerView(
 
         content = {
             Scaffold(topBar = {
-                AppBarView(title = title, onDrawerMenuIconClicked = {
+                AppBarView(title = title,
+                    onDrawerMenuIconClicked = {
                     scope.launch {
                         drawerState.open()
                     }
@@ -88,7 +92,14 @@ fun AppBarView(
 ) {
     TopAppBar(
         title = {
-            Text(text = title)
+            Box(modifier = Modifier.fillMaxSize().padding(end = 30.dp)) {
+                Text(
+                    text = title,
+                    modifier = Modifier.align(Alignment.Center),
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+            }
         },
         navigationIcon = {
             IconButton(onClick = {

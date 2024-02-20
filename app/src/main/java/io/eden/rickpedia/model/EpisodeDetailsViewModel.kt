@@ -18,10 +18,14 @@ class EpisodeDetailsViewModel(
     private val _episodeState = mutableStateOf(SingleEpisodeState())
     val episodeState: State<SingleEpisodeState> = _episodeState
 
-    override fun onCleared() {
-        // TODO Implement cleaning
-        // Clean up resources, reset state, or cancel coroutines here
-        super.onCleared()
+    fun resetState() {
+        _episodeState.value = _episodeState.value.copy(
+            element = null,
+            starring = null,
+            loadingMain = true,
+            loadingStarring = true,
+            error = null,
+        )
     }
 
     fun loadCertainEpisodeData(id: Int) {
@@ -42,7 +46,7 @@ class EpisodeDetailsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             _episodeState.value = _episodeState.value.copy(
                 loadingStarring = false,
-                starring = listOfIds.map{ Pair(it, repository.getCharacterNameById(it)) }
+                starring = listOfIds.map { Pair(it, repository.getCharacterNameById(it)) }
             )
         }
     }
