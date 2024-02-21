@@ -25,7 +25,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(navHostController, rickpediaApp.mainViewModel, rickpediaApp.episodeDetailsViewModel, rickpediaApp.characterDetailsViewModel)
+                    Navigation(
+                        navController = navHostController,
+                        viewModel = rickpediaApp.mainViewModel,
+                        episodeDetailsViewModel = rickpediaApp.episodeDetailsViewModel,
+                        characterDetailsViewModel = rickpediaApp.characterDetailsViewModel,
+                        searchViewModel = rickpediaApp.searchViewModel,
+                    )
                 }
             }
         }

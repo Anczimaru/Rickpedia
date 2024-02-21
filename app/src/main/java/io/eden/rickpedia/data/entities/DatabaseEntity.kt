@@ -1,10 +1,15 @@
 package io.eden.rickpedia.data.entities
 
 import android.util.Log
+import io.eden.rickpedia.data.SearchResult
 
 abstract class DatabaseEntity {
 
     abstract fun generateUpdate(): DatabaseEntity
+
+    abstract fun generateTableContent(): List<Pair<String, String>>
+
+    abstract fun convertToSearchResult(): SearchResult
 }
 
 fun List<DatabaseEntity>.generateUpdates(): List<DatabaseEntity>{

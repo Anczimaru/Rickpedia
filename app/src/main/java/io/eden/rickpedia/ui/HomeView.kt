@@ -60,7 +60,7 @@ fun HomeScreenView(
             Box(modifier = Modifier
                 .padding(50.dp)
                 .clickable {
-                    navController.navigate(Screen.EpisodesListScreen.route)
+                    navController.navigate(Screen.SearchScreen.route)
                 }) {
                 Text("Search", style = MaterialTheme.typography.headlineMedium)
             }

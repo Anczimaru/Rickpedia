@@ -25,6 +25,10 @@ class RickpediaRepository(
         return database.characterDao().getCharacterById(id)?.name ?: ""
     }
 
+    fun getCharactersByName(query: String): List<CharacterEntity> {
+        return database.characterDao().getCharacterByName("%$query%")
+    }
+
     suspend fun getAllCharacters(): List<CharacterEntity> {
         Log.i(TAG, "Fetching characters")
         val localData = database.characterDao().getAllCharacters()

@@ -17,4 +17,7 @@ abstract class CharacterDao: BaseDao<CharacterEntity> {
 
     @Query("select * from `character-table` where id=:id")
     abstract fun getCharacterById(id:Int): CharacterEntity
+
+    @Query("select * from `character-table` where name like :name")
+    abstract fun getCharacterByName(name: String): List<CharacterEntity>
 }

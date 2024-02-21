@@ -24,7 +24,11 @@ fun LocationListView(
     viewModel: MainViewModel,
 ) {
     DrawerView(navController = navController, title = Screen.LocationListScreen.title) {
-        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
                 viewModel.multiLocationsState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -34,11 +38,14 @@ fun LocationListView(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(8.dp)
                     ) {
                         items(viewModel.multiLocationsState.value.list) { location ->
-                            Row(modifier = Modifier.fillMaxWidth()) {
-                                Spacer(modifier = Modifier.padding(8.dp))
-                                Text(text = location.name)
+                            ListItemFragment {
+                                MainCategoryItemFragment(
+                                    value = location.name,
+                                    id = location.id,
+                                    onClicked = {})
                             }
                         }
                     }

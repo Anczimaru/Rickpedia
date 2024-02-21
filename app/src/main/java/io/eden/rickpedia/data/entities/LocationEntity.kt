@@ -3,6 +3,7 @@ package io.eden.rickpedia.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.eden.rickpedia.data.SearchResult
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -28,6 +29,14 @@ data class LocationEntity(
         return this.copy(
             residentsIds = residents.trimToGetIds().filter{ it != 0},
         )
+    }
+
+    override fun generateTableContent(): List<Pair<String, String>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun convertToSearchResult(): SearchResult {
+        TODO("Not yet implemented")
     }
 }
 

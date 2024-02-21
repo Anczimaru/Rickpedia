@@ -3,6 +3,7 @@ package io.eden.rickpedia.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.eden.rickpedia.data.SearchResult
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -26,9 +27,9 @@ data class EpisodesEntity(
 
     fun getKeyValuePairs(): List<Pair<String, String>> {
         return listOf(
-            Pair("name", name),
-            Pair("air_date", air_date ?: "Unknown"),
-            Pair("episode", episode),
+            Pair("Name: ", name),
+            Pair("Air Date: ", air_date ?: "Unknown"),
+            Pair("Episode:", episode),
             // TODO Consider adding characters
         )
     }
@@ -37,6 +38,14 @@ data class EpisodesEntity(
         return this.copy(
             charactersIds = characters.trimToGetIds().filter { it != 0 },
         )
+    }
+
+    override fun generateTableContent(): List<Pair<String, String>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun convertToSearchResult(): SearchResult {
+        TODO("Not yet implemented")
     }
 }
 

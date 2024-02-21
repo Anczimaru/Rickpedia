@@ -1,11 +1,11 @@
 package io.eden.rickpedia.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.eden.rickpedia.model.CharacterDetailsViewModel
 import io.eden.rickpedia.navigation.Screen
+import io.eden.rickpedia.ui.theme.GreenBorder
 
 @Composable
 fun CharacterDetailsView(
@@ -76,15 +78,11 @@ fun CharacterDetailsView(
                             contentDescription = "Image",
                             modifier = Modifier
                                 .wrapContentSize()
-                                .aspectRatio(1f),
+                                .aspectRatio(1f)
+                                .border(BorderStroke(1.dp, GreenBorder)),
                         )
                         /* Character details */
-                        CharacterRow(key = "Name: ", value = element.name)
-                        CharacterRow(key = "Last seen:", value = element.location.name)
-                        CharacterRow(key = "Status: ", value = element.status)
-                        CharacterRow(key = "Species: ", value = element.species)
-                        CharacterRow(key = "Gender: ", value = element.gender)
-                        CharacterRow(key = "Origin: ", value = element.origin.name)
+                        Table(items = element.generateTableContent())
                         when {
                             viewModel.characterState.value.loadingEpisodes -> {
                                 CircularProgressIndicator()
@@ -105,22 +103,6 @@ fun CharacterDetailsView(
     }
 }
 
-
-// TODO improve UI
-@Composable
-fun CharacterRow(key: String, value: String) {
-    Row(horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(
-            text = key,
-            modifier = Modifier.padding(8.dp),
-        )
-        Text(
-            text = value,
-            modifier = Modifier.padding(8.dp)
-        )
-    }
-}
-
 @Composable
 fun EpisodesStarredFragment(
     listOfEpisodes: List<Pair<Int, Pair<String, String>>>,
@@ -128,7 +110,7 @@ fun EpisodesStarredFragment(
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.padding(8.dp))
         Text(
@@ -140,18 +122,27 @@ fun EpisodesStarredFragment(
                     Alignment.CenterHorizontally
                 )
         )
-        Spacer(modifier = Modifier.padding(8.dp))
     }
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
         listOfEpisodes.forEach {
-            Text(
-                text = it.second.first + "  " + it.second.second,
-                style = MaterialTheme.typography.headlineSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.clickable {
-                    onEpisodeClicked(it.first)
-                })
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(BorderStroke(1.dp, GreenBorder), shape = CircleShape),
+            ) {
+                Text(
+                    text = it.second.first + "  " + it.second.second,
+                    style = MaterialTheme.typography.headlineSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .clickable {
+                            onEpisodeClicked(it.first)
+                        })
+            }
+            Spacer(modifier = Modifier.padding(8.dp))
         }
     }
 }
