@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
                         episodeDetailsViewModel = rickpediaApp.episodeDetailsViewModel,
                         characterDetailsViewModel = rickpediaApp.characterDetailsViewModel,
                         searchViewModel = rickpediaApp.searchViewModel,
+                        locationDetailsViewModel = rickpediaApp.locationDetailsViewModel,
                     )
                 }
             }

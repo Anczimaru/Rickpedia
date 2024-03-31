@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import io.eden.rickpedia.model.CharacterDetailsViewModel
 import io.eden.rickpedia.model.EpisodeDetailsViewModel
+import io.eden.rickpedia.model.LocationDetailsViewModel
 import io.eden.rickpedia.model.MainViewModel
 import io.eden.rickpedia.model.SearchViewModel
 import io.eden.rickpedia.ui.CharacterDetailsView
@@ -15,6 +16,7 @@ import io.eden.rickpedia.ui.CharacterListView
 import io.eden.rickpedia.ui.EpisodesDetailsView
 import io.eden.rickpedia.ui.EpisodesListView
 import io.eden.rickpedia.ui.HomeScreenView
+import io.eden.rickpedia.ui.LocationDetailsView
 import io.eden.rickpedia.ui.LocationListView
 import io.eden.rickpedia.ui.SearchView
 
@@ -24,6 +26,7 @@ fun Navigation(
     viewModel: MainViewModel,
     episodeDetailsViewModel: EpisodeDetailsViewModel,
     characterDetailsViewModel: CharacterDetailsViewModel,
+    locationDetailsViewModel: LocationDetailsViewModel,
     searchViewModel: SearchViewModel,
 ) {
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
@@ -54,7 +57,7 @@ fun Navigation(
             CharacterDetailsView(
                 navController = navController,
                 viewModel = characterDetailsViewModel,
-                characterId = id
+                characterId = id,
             )
         }
         composable(
@@ -69,7 +72,23 @@ fun Navigation(
             EpisodesDetailsView(
                 navController = navController,
                 viewModel = episodeDetailsViewModel,
-                episodesId = id
+                episodesId = id,
+            )
+        }
+        composable(
+            Screen.LocationDetails.route + "/{id}", arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                    nullable = false
+                }
+            )
+        ) { entry ->
+            val id = entry.arguments?.getInt("id") ?: 0
+            LocationDetailsView(
+                navController = navController,
+                viewModel = locationDetailsViewModel,
+                locationId = id,
             )
         }
     }

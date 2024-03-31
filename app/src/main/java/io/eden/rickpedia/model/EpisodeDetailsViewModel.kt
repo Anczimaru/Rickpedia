@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class EpisodeDetailsViewModel(
-    private val repository: RickpediaRepository
+    private val repository: RickpediaRepository,
 ) : ViewModel() {
 
     private val TAG = "Rickpedia.EpisodeDetailsViewModel"

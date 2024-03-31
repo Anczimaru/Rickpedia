@@ -31,26 +31,38 @@ fun CharacterListView(
     navController: NavController,
     viewModel: MainViewModel,
 ) {
-    DrawerView(navController = navController, title = Screen.CharacterListScreen.title) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)) {
+    val onCharacterClicked: (Int) -> Unit = { id ->
+        navController.navigate(Screen.CharacterDetails.route + "/${id}")
+    }
+    /* UI */
+    DrawerView(
+        navController = navController,
+        title = Screen.CharacterListScreen.title,
+        triggerSearch = { query -> viewModel.triggerCharacterSearch(query) }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             when {
                 viewModel.multiCharacterState.value.loadingFirstBatch -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
+
                 else -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
                         items(viewModel.multiCharacterState.value.list) { character ->
-                            Row(modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                                .clickable {
-                                    navController.navigate(Screen.CharacterDetails.route + "/${character.id}")
-                                },
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp)
+                                    .clickable {
+                                        onCharacterClicked(character.id)
+                                    },
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Column(
@@ -61,7 +73,10 @@ fun CharacterListView(
                                         modifier = Modifier.size(200.dp)
                                     )
                                     Spacer(modifier = Modifier.padding(8.dp))
-                                    Text(text = character.name, modifier = Modifier.align(Alignment.CenterHorizontally))
+                                    Text(
+                                        text = character.name,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                                    )
                                     Spacer(modifier = Modifier.padding(8.dp))
                                 }
                             }
@@ -69,9 +84,7 @@ fun CharacterListView(
                     }
                 }
             }
-
         }
-
     }
 }
 

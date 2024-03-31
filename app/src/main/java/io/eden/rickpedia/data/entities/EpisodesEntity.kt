@@ -25,15 +25,6 @@ data class EpisodesEntity(
     val charactersIds: List<Int>?
 ) : Parcelable, DatabaseEntity() {
 
-    fun getKeyValuePairs(): List<Pair<String, String>> {
-        return listOf(
-            Pair("Name: ", name),
-            Pair("Air Date: ", air_date ?: "Unknown"),
-            Pair("Episode:", episode),
-            // TODO Consider adding characters
-        )
-    }
-
     override fun generateUpdate(): DatabaseEntity {
         return this.copy(
             charactersIds = characters.trimToGetIds().filter { it != 0 },
@@ -41,7 +32,12 @@ data class EpisodesEntity(
     }
 
     override fun generateTableContent(): List<Pair<String, String>> {
-        TODO("Not yet implemented")
+        return listOf(
+            Pair("Name: ", name),
+            Pair("Air Date: ", air_date ?: "Unknown"),
+            Pair("Episode:", episode),
+            // TODO Consider adding characters
+        )
     }
 
     override fun convertToSearchResult(): SearchResult {

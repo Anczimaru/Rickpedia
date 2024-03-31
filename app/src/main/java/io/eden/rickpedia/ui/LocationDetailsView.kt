@@ -21,15 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import io.eden.rickpedia.model.EpisodeDetailsViewModel
+import io.eden.rickpedia.model.LocationDetailsViewModel
 import io.eden.rickpedia.navigation.Screen
 import io.eden.rickpedia.ui.theme.GreenBorder
 
 @Composable
-fun EpisodesDetailsView(
+fun LocationDetailsView(
     navController: NavController,
-    viewModel: EpisodeDetailsViewModel,
-    episodesId: Int,
+    viewModel: LocationDetailsViewModel,
+    locationId: Int,
 ) {
     val onCharacterClicked: (Int) -> Unit = { id ->
         navController.navigate(Screen.CharacterDetails.route + "/$id")
@@ -40,43 +40,44 @@ fun EpisodesDetailsView(
             viewModel.resetState()
         }
     }
-    viewModel.loadCertainEpisodeData(episodesId)
+
+    viewModel.loadCertainLocation(locationId)
     when {
-        viewModel.episodeState.value.loadingMain -> {
+        viewModel.locationState.value.loadingMain -> {
             Box {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
 
         else -> {
-            val element = viewModel.episodeState.value.element!!
-            DrawerView(navController = navController, title = element.episode) { pd ->
+            val element = viewModel.locationState.value.element!!
+            DrawerView(navController = navController, title = element.name) { pd ->
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(pd)
                 ) {
-                    element.charactersIds?.let { ids -> viewModel.loadStarringCharacters(ids) }
+                    element.residentsIds.let { ids -> viewModel.loadResidents(ids) }
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp),
                     ) {
-                        //Add Image
                         Box(modifier = Modifier.padding(8.dp)) {
                             Table(items = element.generateTableContent())
                         }
                         when {
-                            viewModel.episodeState.value.loadingStarring -> {
+                            viewModel.locationState.value.loadingResidents -> {
                                 CircularProgressIndicator()
                             }
 
                             else -> {
-                                StarringComposable(
-                                    listOfCharacters = viewModel.episodeState.value.starring!!,
+                                ResidentsComposable(
+                                    listOfResidents = viewModel.locationState.value.residents!!,
                                     onCharacterClicked = { id ->
                                         onCharacterClicked(id)
-                                    })
+                                    }
+                                )
                             }
                         }
                     }
@@ -87,28 +88,27 @@ fun EpisodesDetailsView(
 }
 
 @Composable
-fun StarringComposable(
-    listOfCharacters: List<Pair<Int, String>>, onCharacterClicked: (Int) -> Unit
+fun ResidentsComposable(
+    listOfResidents: List<Pair<Int, String>>,
+    onCharacterClicked: (Int) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.padding(8.dp))
         Text(
-            text = "Starring",
+            text = "Residents",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .padding(8.dp)
-                .align(
-                    Alignment.CenterHorizontally
-                )
+                .align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.padding(8.dp))
     }
     LazyColumn(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-        items(listOfCharacters) {
+        items(listOfResidents) {
             Box(
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxWidth()
+                    .padding(8.dp)
                     .border(BorderStroke(1.dp, GreenBorder), shape = CircleShape)
             ) {
                 Text(text = it.second,

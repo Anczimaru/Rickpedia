@@ -27,12 +27,16 @@ data class LocationEntity(
 
     override fun generateUpdate(): DatabaseEntity {
         return this.copy(
-            residentsIds = residents.trimToGetIds().filter{ it != 0},
+            residentsIds = residents.trimToGetIds().filter { it != 0 },
         )
     }
 
     override fun generateTableContent(): List<Pair<String, String>> {
-        TODO("Not yet implemented")
+        return listOf(
+            Pair("Name: ", name),
+            Pair("Type: ", type),
+            Pair("dimension: ", dimension),
+        )
     }
 
     override fun convertToSearchResult(): SearchResult {

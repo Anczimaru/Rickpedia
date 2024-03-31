@@ -35,6 +35,17 @@ class MainViewModel(
         loadAllEpisodesData()
     }
 
+    fun triggerCharacterSearch(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val characterEntities = repository.getCharactersByName(query)
+            _multiCharactersState.value = _multiCharactersState.value.copy(
+                list = characterEntities,
+                loadingFirstBatch = false,
+                error = null,
+            )
+        }
+    }
+
     fun loadAllCharactersData() {
         Log.i(TAG, "Loading characters data")
         viewModelScope.launch(Dispatchers.IO) {

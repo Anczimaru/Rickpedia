@@ -136,7 +136,7 @@ fun EpisodesStarredFragment(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(start= 16.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
                         .fillMaxWidth()
                         .clickable {
                             onEpisodeClicked(it.first)
