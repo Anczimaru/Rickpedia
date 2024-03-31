@@ -34,12 +34,14 @@ fun EpisodesDetailsView(
     val onCharacterClicked: (Int) -> Unit = { id ->
         navController.navigate(Screen.CharacterDetails.route + "/$id")
     }
-
+    /* Clean-up */
     DisposableEffect(viewModel) {
         onDispose {
             viewModel.resetState()
         }
     }
+
+    /* UI */
     viewModel.loadCertainEpisodeData(episodesId)
     when {
         viewModel.episodeState.value.loadingMain -> {

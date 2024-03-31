@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 
 class LocationDetailsViewModel(
     private val repository: RickpediaRepository,
-): ViewModel() {
+): BaseViewModel() {
     private val TAG = "Rickpedia.LocationDetailsViewModel"
     private val _locationState = mutableStateOf(SingleLocationState())
     val locationState: State<SingleLocationState> = _locationState
 
-    fun resetState() {
+    override fun resetState() {
         _locationState.value = _locationState.value.copy(
             element = null,
             residents = null,

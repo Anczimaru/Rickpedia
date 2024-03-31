@@ -17,4 +17,7 @@ abstract class LocationDao: BaseDao<LocationEntity> {
 
     @Query("select * from `location-table` where id=:id")
     abstract fun getLocationById(id:Int): LocationEntity
+
+    @Query("select * from `location-table` where name like :query")
+    abstract fun getLocationsByString(query: String): List<LocationEntity>
 }

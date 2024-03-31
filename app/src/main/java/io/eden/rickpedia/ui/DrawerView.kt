@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -143,7 +144,7 @@ fun AppBarView(
                         // NO Search icon here
                     }
 
-                    title.equals(Screen.CharacterListScreen.title) -> {
+                    title in listOf(Screen.CharacterListScreen.title, Screen.EpisodesListScreen.title, Screen.LocationListScreen.title) -> {
                         // Add button for switching to grid
                         IconButton(onClick = { isSearchBarVisiable = !isSearchBarVisiable }) {
                             Icon(
@@ -212,7 +213,7 @@ fun DrawerItem(
             Icon(
                 painter = painterResource(id = item.icon),
                 contentDescription = item.dTittle,
-                modifier = Modifier.padding(end = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(top = 2.dp, end = 8.dp).align(Alignment.CenterVertically)
             )
             Text(text = item.dTittle, style = MaterialTheme.typography.headlineMedium)
         }

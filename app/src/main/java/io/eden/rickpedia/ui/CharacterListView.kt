@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +35,13 @@ fun CharacterListView(
     val onCharacterClicked: (Int) -> Unit = { id ->
         navController.navigate(Screen.CharacterDetails.route + "/${id}")
     }
+    /* Clean-up */
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
+
     /* UI */
     DrawerView(
         navController = navController,

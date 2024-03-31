@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,8 +34,19 @@ fun LocationListView(
     val onLocationClicked: (Int) -> Unit = { id ->
         navController.navigate(Screen.LocationDetails.route + "/${id}")
     }
+    /* Clean-up */
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
+
     /* UI */
-    DrawerView(navController = navController, title = Screen.LocationListScreen.title) {
+    DrawerView(
+        navController = navController,
+        title = Screen.LocationListScreen.title,
+        triggerSearch = { query -> viewModel.triggerLocationSearch(query) }
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

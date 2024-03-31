@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 
 class EpisodeDetailsViewModel(
     private val repository: RickpediaRepository,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val TAG = "Rickpedia.EpisodeDetailsViewModel"
     private val _episodeState = mutableStateOf(SingleEpisodeState())
     val episodeState: State<SingleEpisodeState> = _episodeState
 
-    fun resetState() {
+    override fun resetState() {
         _episodeState.value = _episodeState.value.copy(
             element = null,
             starring = null,

@@ -1,9 +1,9 @@
 package io.eden.rickpedia.model
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.eden.rickpedia.data.RickpediaRepository
 import io.eden.rickpedia.data.entities.CharacterEntity
@@ -17,22 +17,27 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val repository: RickpediaRepository
-) : ViewModel() {
+) : BaseViewModel() {
+    //TODO split into smaller view models for list views
 
     private val TAG = "Rickpedia.MainViewModel"
     private val _multiLocationsState = mutableStateOf(MultiLocationsState())
     private val _multiEpisodesState = mutableStateOf(MultiEpisodesState())
     private val _multiCharactersState = mutableStateOf(MultiCharacterState())
-    private val _locationState = mutableStateOf(SingleLocationState())
     val multiCharacterState: State<MultiCharacterState> = _multiCharactersState
     val multiLocationsState: State<MultiLocationsState> = _multiLocationsState
     val multiEpisodesState: State<MultiEpisodesState> = _multiEpisodesState
-    val locationState: State<SingleLocationState> = _locationState
 
     init {
         loadAllCharactersData()
         loadAllLocationData()
         loadAllEpisodesData()
+    }
+
+    override fun resetState() {
+        _multiCharactersState.clearCharacters()
+        _multiEpisodesState.clearEpisodes()
+        _multiLocationsState.clearLocations()
     }
 
     fun triggerCharacterSearch(query: String) {
@@ -46,6 +51,29 @@ class MainViewModel(
         }
     }
 
+    fun triggerLocationSearch(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val locationEntities = repository.getLocationsByString(query)
+            _multiLocationsState.value = _multiLocationsState.value.copy(
+                list = locationEntities,
+                loadingFirstBatch = false,
+                error = null,
+            )
+        }
+    }
+
+    fun triggerEpisodeSearch(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val episodeEntities = repository.getEpisodesByString(query)
+            _multiEpisodesState.value = _multiEpisodesState.value.copy(
+                list = episodeEntities,
+                loadingFirstBatch = false,
+                error = null,
+            )
+        }
+    }
+
+    // TODO improve error handling of loadAll... calls, make them resiliant to lifecycle changes and etc
     fun loadAllCharactersData() {
         Log.i(TAG, "Loading characters data")
         viewModelScope.launch(Dispatchers.IO) {
@@ -131,10 +159,31 @@ class MainViewModel(
         val error: String? = null,
     )
 
-    data class SingleLocationState(
-        val element: LocationEntity? = null,
-        val loading: Boolean = true,
-        val error: String? = null,
-    )
+    private fun MutableState<MultiCharacterState>.clearCharacters() {
+        this.value = this.value.copy(
+            list = emptyList(),
+            loadingFirstBatch = true,
+            loadingAll = true,
+            error = null,
+        )
+    }
+
+    private fun MutableState<MultiLocationsState>.clearLocations() {
+        this.value = this.value.copy(
+            list = emptyList(),
+            loadingFirstBatch = true,
+            loadingAll = true,
+            error = null,
+        )
+    }
+
+    private fun MutableState<MultiEpisodesState>.clearEpisodes() {
+        this.value = this.value.copy(
+            list = emptyList(),
+            loadingFirstBatch = true,
+            loadingAll = true,
+            error = null,
+        )
+    }
 }
 

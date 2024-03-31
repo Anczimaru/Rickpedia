@@ -17,6 +17,8 @@ class RickpediaRepository(
 ) {
     private val TAG = "Rickpedia.Repository"
 
+    /* Character related logic */
+
     fun getCharacterById(id: Int): CharacterEntity {
         return database.characterDao().getCharacterById(id)
     }
@@ -43,8 +45,14 @@ class RickpediaRepository(
         }
     }
 
+    /* Location related logic */
+
     fun getLocationById(id: Int): LocationEntity {
         return database.locationDao().getLocationById(id)
+    }
+
+    fun getLocationsByString(query: String): List<LocationEntity> {
+        return database.locationDao().getLocationsByString("%$query%")
     }
 
     suspend fun getAllLocations(): List<LocationEntity> {
@@ -61,6 +69,8 @@ class RickpediaRepository(
         }
     }
 
+    /* Episodes related logic */
+
     fun getEpisodeById(id: Int): EpisodesEntity {
         return database.episodeDao().getEpisodeById(id)
     }
@@ -68,6 +78,14 @@ class RickpediaRepository(
     fun getEpisodeNameById(id: Int): Pair<String, String> {
         val episode = getEpisodeById(id)
         return Pair<String, String>(episode.episode, episode.name)
+    }
+
+    fun getEpisodesByString(query: String): List<EpisodesEntity> {
+        //TODO refactor this
+        val likeQuery = "%$query%"
+        val episodes = database.episodeDao().getEpisodesByName(likeQuery) + database.episodeDao()
+            .getEpisodesByEpisodeQuery(likeQuery)
+        return episodes
     }
 
     suspend fun getAllEpisodes(): List<EpisodesEntity> {
@@ -83,6 +101,8 @@ class RickpediaRepository(
             localData
         }
     }
+
+    /* Other */
 
     private fun <T : DatabaseEntity> getDao(element: T): BaseDao<T> {
         return when (element) {

@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -38,13 +39,24 @@ fun SearchView(
     navController: NavController,
     viewModel: SearchViewModel,
 ) {
-    DrawerView(navController = navController) {
+    /* Clean-up */
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
+
+    /* UI */
+    DrawerView(
+        navController = navController,
+        title = "Search"
+    ) {
         Column(
             modifier = Modifier.padding(it)
         ) {
             SearchBarAndButton(
                 value = viewModel.currentQuery,
-                onButtonClicked = { viewModel.searchForCharacter() },
+                onButtonClicked = { viewModel.searchForEntity() },
             )
             Column(
                 modifier = Modifier
@@ -114,7 +126,7 @@ fun ResultsComposable(viewModel: SearchViewModel, navController: NavController) 
                     }
 
                     is LocationEntity -> {
-                        // TODO
+                       navController.navigate(Screen.LocationDetails.route + "/$id")
                     }
 
                     is EpisodesEntity -> {

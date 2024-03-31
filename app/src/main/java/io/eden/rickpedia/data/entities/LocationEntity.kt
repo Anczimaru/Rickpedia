@@ -40,7 +40,10 @@ data class LocationEntity(
     }
 
     override fun convertToSearchResult(): SearchResult {
-        TODO("Not yet implemented")
+        return SearchResult(
+            id = id,
+            name = name,
+        )
     }
 }
 

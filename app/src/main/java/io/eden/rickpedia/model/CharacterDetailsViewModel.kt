@@ -11,10 +11,20 @@ import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(
     private val repository: RickpediaRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _charactersState = mutableStateOf(SingleCharacterState())
     val characterState: State<SingleCharacterState> = _charactersState
+
+    override fun resetState() {
+        _charactersState.value = _charactersState.value.copy(
+            element = null,
+            starredEpisodes = null,
+            loadingMain = true,
+            loadingEpisodes = true,
+            error = null,
+        )
+    }
 
     fun loadCertainCharacterData(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {

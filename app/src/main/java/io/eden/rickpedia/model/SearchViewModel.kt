@@ -12,20 +12,20 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val repository: RickpediaRepository,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _searchState = mutableStateOf(SearchState())
     val searchState: State<SearchState> = _searchState
     var currentQuery: MutableState<String> = mutableStateOf("")
 
-    fun searchForCharacter() {
+    fun searchForEntity() {
         _searchState.value = _searchState.value.copy(
             loadingResults = true
         )
         viewModelScope.launch(Dispatchers.IO) {
             _searchState.value = _searchState.value.copy(
                 loadingResults = false,
-                results = repository.getCharactersByName(currentQuery.value),
+                results = repository.getCharactersByName(currentQuery.value) + repository.getLocationsByString(currentQuery.value) + repository.getLocationsByString(currentQuery.value),
             )
         }
     }
@@ -34,4 +34,8 @@ class SearchViewModel(
         val loadingResults: Boolean = true,
         val results: List<DatabaseEntity>? = null,
     )
+
+    override fun resetState() {
+        TODO("Not yet implemented")
+    }
 }

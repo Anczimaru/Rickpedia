@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,19 @@ fun EpisodesListView(
     navController: NavController,
     viewModel: MainViewModel,
 ) {
-    DrawerView(navController = navController, title = Screen.EpisodesListScreen.title) {
+    /* Clean-up */
+    DisposableEffect(viewModel) {
+        onDispose {
+            viewModel.resetState()
+        }
+    }
+
+    /* UI */
+    DrawerView(
+        navController = navController,
+        title = Screen.EpisodesListScreen.title,
+        triggerSearch = { query -> viewModel.triggerEpisodeSearch(query) },
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -34,13 +34,14 @@ fun LocationDetailsView(
     val onCharacterClicked: (Int) -> Unit = { id ->
         navController.navigate(Screen.CharacterDetails.route + "/$id")
     }
-
+    /* Clean-up */
     DisposableEffect(viewModel) {
         onDispose {
             viewModel.resetState()
         }
     }
 
+    /* UI */
     viewModel.loadCertainLocation(locationId)
     when {
         viewModel.locationState.value.loadingMain -> {
