@@ -37,46 +37,39 @@ fun HomeScreenView(
 ) {
     DrawerView(navController = navController, title = "Rickpedia") {
         // TODO make some grid here to be able to select what you are looking for
-        Box(modifier = Modifier.fillMaxSize()) {
-            /* Background Image */
-            Image(
-                painter = painterResource(id = R.drawable.background),
-                contentDescription = null, // Content description is null since it's a background image
-                modifier = Modifier.fillMaxSize(), // Fill the entire size of the Box
-//                colorFilter = ColorFilter.tint(color = Color.White) // Apply any desired color filter
-            )
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top,
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize(),
-            ) {
-                /* Display list of views without Home view reference */
-                drawerScreens.drop(1).forEach { item ->
-                    Row(modifier = Modifier
-                        .padding(30.dp)
-                        .clickable {
-                            navController.navigate(item.dRoute)
-                        }
-                        .fillMaxWidth()
-                        .border(BorderStroke(1.dp, GreenBorder), shape = CircleShape),
-                        horizontalArrangement = Arrangement.Center
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+        ) {
+            /* Display list of views without Home view reference */
+            drawerScreens.drop(1).forEach { item ->
+                Row(modifier = Modifier
+                    .padding(30.dp)
+                    .clickable {
+                        navController.navigate(item.dRoute)
+                    }
+                    .fillMaxWidth()
+                    .border(BorderStroke(1.dp, GreenBorder), shape = CircleShape),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.padding(8.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = item.icon),
-                                contentDescription = item.dTittle,
-                                modifier = Modifier.padding(top = 2.dp, end = 8.dp).align(Alignment.CenterVertically)
-                            )
-                            Text(
-                                text = item.dTittle,
-                                style = MaterialTheme.typography.headlineMedium,
-                                textAlign = TextAlign.Center
-                            )
-                        }
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = item.dTittle,
+                            modifier = Modifier
+                                .padding(top = 2.dp, end = 8.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                        Text(
+                            text = item.dTittle,
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
             }

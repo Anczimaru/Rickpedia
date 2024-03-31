@@ -4,8 +4,7 @@ Android App for learning how to write Android Apps
 
 
 # TODO
-- Add search functionality to other views
-- Add other elements to Search screen (not only characters)
+- refactor MainViewModel into smaller chunks
 - improve UI
   - Add toggles for characters screens
   - add tabs to character views

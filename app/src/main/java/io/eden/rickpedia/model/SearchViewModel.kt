@@ -18,24 +18,37 @@ class SearchViewModel(
     val searchState: State<SearchState> = _searchState
     var currentQuery: MutableState<String> = mutableStateOf("")
 
+    override fun resetState() {
+        _searchState.clearSearchState()
+    }
+
     fun searchForEntity() {
-        _searchState.value = _searchState.value.copy(
-            loadingResults = true
-        )
-        viewModelScope.launch(Dispatchers.IO) {
+        if (currentQuery.value.isBlank()) {
+            _searchState.clearSearchState()
+        } else {
             _searchState.value = _searchState.value.copy(
-                loadingResults = false,
-                results = repository.getCharactersByName(currentQuery.value) + repository.getLocationsByString(currentQuery.value) + repository.getLocationsByString(currentQuery.value),
+                loadingResults = true
             )
+            viewModelScope.launch(Dispatchers.IO) {
+                _searchState.value = _searchState.value.copy(
+                    loadingResults = false,
+                    results = repository.getCharactersByName(currentQuery.value)
+                            + repository.getEpisodesByString(currentQuery.value)
+                            + repository.getLocationsByString(currentQuery.value),
+                )
+            }
         }
     }
 
     data class SearchState(
-        val loadingResults: Boolean = true,
+        val loadingResults: Boolean = false,
         val results: List<DatabaseEntity>? = null,
     )
 
-    override fun resetState() {
-        TODO("Not yet implemented")
+    fun MutableState<SearchState>.clearSearchState() {
+        this.value = this.value.copy(
+            results = emptyList(),
+            loadingResults = false,
+        )
     }
 }

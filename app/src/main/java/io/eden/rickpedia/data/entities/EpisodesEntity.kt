@@ -3,6 +3,7 @@ package io.eden.rickpedia.data.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.eden.rickpedia.R
 import io.eden.rickpedia.data.SearchResult
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -42,6 +43,7 @@ data class EpisodesEntity(
 
     override fun convertToSearchResult(): SearchResult {
         return SearchResult(
+            image = R.drawable.episodes_icon,
             id = id,
             name = name
         )

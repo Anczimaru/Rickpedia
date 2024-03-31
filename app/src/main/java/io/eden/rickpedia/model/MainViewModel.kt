@@ -35,9 +35,13 @@ class MainViewModel(
     }
 
     override fun resetState() {
-        _multiCharactersState.clearCharacters()
-        _multiEpisodesState.clearEpisodes()
-        _multiLocationsState.clearLocations()
+        //TODO implement after refactor, do not do this again, either don't connect single viewmodel to multiple views  or split it into smaller chunks
+//        _multiCharactersState.clearCharacters()
+//        _multiEpisodesState.clearEpisodes()
+//        _multiLocationsState.clearLocations()
+        loadAllCharactersData()
+        loadAllLocationData()
+        loadAllEpisodesData()
     }
 
     fun triggerCharacterSearch(query: String) {

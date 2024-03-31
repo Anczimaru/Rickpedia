@@ -1,6 +1,8 @@
 package io.eden.rickpedia.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.eden.rickpedia.model.MainViewModel
 import io.eden.rickpedia.navigation.Screen
+import io.eden.rickpedia.ui.theme.GreenBorder
 
 @Composable
 fun CharacterListView(
@@ -74,6 +78,7 @@ fun CharacterListView(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Column(
+                                    modifier = Modifier.border(BorderStroke(1.dp, GreenBorder))
                                 ) {
                                     Image(
                                         painter = rememberAsyncImagePainter(model = character.image),

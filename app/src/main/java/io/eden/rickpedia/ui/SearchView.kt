@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -118,22 +120,26 @@ fun SearchBarAndButton(
 @Composable
 fun ResultsComposable(viewModel: SearchViewModel, navController: NavController) {
     LazyColumn {
-        items(viewModel.searchState.value.results!!) { entity ->
-            ResultsEntry(result = entity.convertToSearchResult(), onClicked = { id ->
-                when (entity) {
-                    is CharacterEntity -> {
-                        navController.navigate(Screen.CharacterDetails.route + "/$id")
-                    }
+        if (viewModel.searchState.value.results.isNullOrEmpty()) {
+            // Do nothing
+        } else {
+            items(viewModel.searchState.value.results!!) { entity ->
+                ResultsEntry(result = entity.convertToSearchResult(), onClicked = { id ->
+                    when (entity) {
+                        is CharacterEntity -> {
+                            navController.navigate(Screen.CharacterDetails.route + "/$id")
+                        }
 
-                    is LocationEntity -> {
-                       navController.navigate(Screen.LocationDetails.route + "/$id")
-                    }
+                        is LocationEntity -> {
+                            navController.navigate(Screen.LocationDetails.route + "/$id")
+                        }
 
-                    is EpisodesEntity -> {
-                        navController.navigate(Screen.EpisodeDetails.route + "/$id")
+                        is EpisodesEntity -> {
+                            navController.navigate(Screen.EpisodeDetails.route + "/$id")
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     }
 }
@@ -147,11 +153,22 @@ fun ResultsEntry(result: SearchResult, onClicked: (Int) -> Unit) {
         .clickable {
             onClicked(result.id)
         }) {
-        Text(
-            text = result.name,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 8.dp, end = 20.dp),
-        )
+        Row(
+            modifier = Modifier.padding(4.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = result.image),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .align(Alignment.CenterVertically)
+            )
+            Text(
+                text = result.name,
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(start = 20.dp, top = 8.dp, bottom = 8.dp, end = 20.dp),
+            )
+        }
     }
 }
 
