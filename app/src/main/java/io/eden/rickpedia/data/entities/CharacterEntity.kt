@@ -33,7 +33,7 @@ data class CharacterEntity(
     val episodeIds: List<Int?>,
 ) : Parcelable, DatabaseEntity() {
 
-    override fun generateUpdate(): CharacterEntity{
+    override fun generateUpdate(): CharacterEntity {
         return this.copy(
             locationId = location.url.trimToGetId(),
             episodeIds = episode.trimToGetIds().filter { it != 0 },
@@ -98,5 +98,7 @@ const val dummyCharacter = "{\n" +
         "    \"https://rickandmortyapi.com/api/episode/2\"" +
         "  ],\n" +
         "  \"url\": \"https://rickandmortyapi.com/api/character/2\",\n" +
-        "  \"created\": \"2017-11-04T18:50:21.651Z\"\n" +
+        "  \"created\": \"2017-11-04T18:50:21.651Z\", \n" +
+        " \"locationId\": 1, \n" +
+        " \"episodeIds\": [1,2,3] \n" +
         "}"

@@ -142,6 +142,13 @@ class MainViewModel(
         }
     }
 
+    fun getEpisodeNameById(id: Int): String {
+        //TODO finish make proper DB read here
+//        viewModelScope.launch(Dispatchers.IO) {  }
+//        return repository.getEpisodeNameById(id).second
+        return "Placeholder"
+    }
+
     data class MultiCharacterState(
         val list: List<CharacterEntity> = emptyList(),
         val loadingFirstBatch: Boolean = true,

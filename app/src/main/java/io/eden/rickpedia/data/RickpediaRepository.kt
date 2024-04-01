@@ -12,8 +12,8 @@ import kotlinx.coroutines.withContext
 
 
 class RickpediaRepository(
-    private val apiService: ApiService,
-    private val database: RickpediaDatabase,
+    private val apiService: ApiService, // TODO add mock api by default
+    private val database: RickpediaDatabase, //TODO add mock database by default
 ) {
     private val TAG = "Rickpedia.Repository"
 

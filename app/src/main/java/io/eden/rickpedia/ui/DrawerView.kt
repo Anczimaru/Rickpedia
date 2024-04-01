@@ -2,15 +2,16 @@
 
 package io.eden.rickpedia.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -52,6 +53,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.eden.rickpedia.R
 import io.eden.rickpedia.navigation.Screen
 import io.eden.rickpedia.navigation.drawerScreens
+import io.eden.rickpedia.ui.theme.GreenBorder
 import kotlinx.coroutines.launch
 
 @Composable
@@ -88,18 +90,18 @@ fun DrawerView(
         },
 
         content = {
-            Scaffold(topBar = {
-                AppBarView(
-                    title = title,
-                    onDrawerMenuIconClicked = {
-                        scope.launch {
-                            drawerState.open()
-                        }
-                    },
-                    triggerSearch = triggerSearch
-                )
-            }
-
+            Scaffold(
+                topBar = {
+                    AppBarView(
+                        title = title,
+                        onDrawerMenuIconClicked = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        },
+                        triggerSearch = triggerSearch
+                    )
+                },
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     /* Background Image */
@@ -125,7 +127,9 @@ fun AppBarView(
 ) {
     var isSearchBarVisiable by remember { mutableStateOf(false) }
     var searchQueryValue by remember { mutableStateOf(TextFieldValue()) }
-    Column {
+    Column(
+        modifier = Modifier.border(BorderStroke(1.dp, GreenBorder))
+    ) {
         TopAppBar(
             title = {
                 Box(
@@ -173,6 +177,7 @@ fun AppBarView(
             }
         )
         if (isSearchBarVisiable) {
+            //TODO improve UI
             TextField(
                 value = searchQueryValue,
                 onValueChange = {

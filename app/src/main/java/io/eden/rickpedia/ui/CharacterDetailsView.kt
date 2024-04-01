@@ -48,11 +48,11 @@ fun CharacterDetailsView(
 
     /* UI */
 
-    //Load Character Data
+    // Load Character Data
     viewModel.loadCertainCharacterData(characterId)
 
     when {
-        //Provide placeholder for time when app is loading
+        // Provide placeholder for time when app is loading
         viewModel.characterState.value.loadingMain -> {
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -60,7 +60,7 @@ fun CharacterDetailsView(
         }
         // TODO Optional add error handling here
 
-        //Character data loaded so generate content for the view
+        // Character data loaded so generate content for the view
         else -> {
             //Assign character to variable for future use
             val element = viewModel.characterState.value.element!!
